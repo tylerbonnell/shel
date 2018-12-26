@@ -1,0 +1,1 @@
+Shel is a poetry generation skill for Alexa.
