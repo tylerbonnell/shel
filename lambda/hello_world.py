@@ -19,10 +19,11 @@ logger.setLevel(logging.INFO)
 def launch_request_handler(handler_input):
     """Handler for Skill Launch."""
     # type: (HandlerInput) -> Response
-    speech_text = "What's up, my neighbor?!"
+    loaded_rnn = textgenrnn('shel_model_weights.hdf5')
+    poem = loaded_rnn.generate(n=1, temperature=0.6, return_as_list=True)[0]
 
-    return handler_input.response_builder.speak(speech_text).set_card(
-        SimpleCard("Shel", speech_text)).set_should_end_session(
+    return handler_input.response_builder.speak(poem).set_card(
+        SimpleCard("Shel", poem)).set_should_end_session(
         False).response
 
 
