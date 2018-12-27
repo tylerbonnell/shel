@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import random
+import os
 
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.utils import is_request_type, is_intent_name
@@ -8,8 +10,6 @@ from ask_sdk_core.handler_input import HandlerInput
 
 from ask_sdk_model.ui import SimpleCard
 from ask_sdk_model import Response
-
-from textgenrnn import textgenrnn
 
 sb = SkillBuilder()
 
@@ -21,11 +21,10 @@ logger.setLevel(logging.INFO)
 def launch_request_handler(handler_input):
     """Handler for Skill Launch."""
     # type: (HandlerInput) -> Response
-    loaded_rnn = textgenrnn('shel_model_weights.hdf5')
-    poem = loaded_rnn.generate(n=1, temperature=0.6, return_as_list=True)[0]
+    speech_text = "Hi, I'm Shel. Ask me to recite a poem!"
 
-    return handler_input.response_builder.speak(poem).set_card(
-        SimpleCard("Shel", poem)).set_should_end_session(
+    return handler_input.response_builder.speak(speech_text).set_card(
+        SimpleCard("Shel", speech_text)).set_should_end_session(
         False).response
 
 
@@ -33,7 +32,11 @@ def launch_request_handler(handler_input):
 def poem_intent_handler(handler_input):
     """Handler for Poem Intent."""
     # type: (HandlerInput) -> Response
-    speech_text = "Blah blah blah poetry"
+    files = os.listdir('poems')
+    poem = 'poems/' + random.choice(files)
+    speech_text = ''
+    with open(poem) as f:
+        speech_text = f.read()
 
     return handler_input.response_builder.speak(speech_text).set_card(
         SimpleCard("Shel", speech_text)).set_should_end_session(
