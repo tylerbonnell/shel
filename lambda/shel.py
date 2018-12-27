@@ -36,7 +36,8 @@ def poem_intent_handler(handler_input):
     poem = 'poems/' + random.choice(files)
     speech_text = ''
     with open(poem) as f:
-        speech_text = '<voice name="Matthew"><prosody rate="slow">' + f.read() + '</prosody></voice>'
+        txt = f.read().replace('/', '<break strength="x-strong"/>').replace('||', '<break time="1s"/>')
+        speech_text = '<voice name="Matthew"><prosody rate="slow" pitch="low">' + txt + '</prosody></voice>'
 
     return handler_input.response_builder.speak(speech_text).set_card(
         SimpleCard("Shel", speech_text)).set_should_end_session(
