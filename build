@@ -1,0 +1,8 @@
+pip install -r lambda/requirements.txt -t skill_env
+find skill_env -type f -name '*.py' -delete
+cp lambda/* skill_env
+rm lambda.zip
+cd skill_env
+zip -r ../lambda.zip .
+cd ..
+rm -rf skill_env
